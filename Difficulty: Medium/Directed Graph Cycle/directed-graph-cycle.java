@@ -4,42 +4,40 @@ class Solution {
         //on the same path, node has to be visited again
         //use two visited arrays: one is normal and another is path visited (this is backtraked)
         
+        //another way - use toplogical sort
         
-        ArrayList<ArrayList<Integer>> edge = new ArrayList<>();
-        
+        int ind [] = new int[V];
+        ArrayList<ArrayList<Integer>> adj = new ArrayList<>();
         for(int i = 0; i < V; i++){
-            edge.add(new ArrayList<Integer>());
+            adj.add(new ArrayList<Integer>());
         }
-        boolean vis [] = new boolean [V];
-        boolean path [] = new boolean [V];
+        
         for(int i = 0; i < edges.length; i++){
-            edge.get(edges[i][0]).add(edges[i][1]);
+            adj.get(edges[i][0]).add(edges[i][1]);
+            ind[edges[i][1]]++;
         }
-        
+        Queue<Integer> q = new ArrayDeque<>();
+        ArrayList<Integer> ans = new ArrayList<>();
         for(int i = 0; i < V; i++){
-            if(!vis[i]){
-                if(dfs(edge, vis, path, i)) return true;
+            
+            if(ind[i] == 0){
+                q.add(i);
             }
         }
-        return false;
+        
+        int count = 0;
+        while(!q.isEmpty()){
+            int v = q.poll();
+            count++;
+            for(int i : adj.get(v)){
+                ind[i]--;
+                if(ind[i] == 0){
+                    q.add(i);
+                }
+            }
+        }
+        
+        return (!(count == V));
     }
     
-    public boolean dfs(ArrayList<ArrayList<Integer>> edge, boolean vis [], boolean path [], int e){
-        
-       
-        vis[e] = true;
-        path[e] = true;
-        
-        
-        for(int i: edge.get(e)){
-            if(!vis[i]){
-                if(dfs(edge, vis, path, i)) return true;
-                
-            }else{
-                if(path[i]) return true;
-            }
-        }
-        path[e] = false;
-        return false;
-    }
 }
