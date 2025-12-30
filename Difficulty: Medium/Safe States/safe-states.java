@@ -4,9 +4,7 @@ class Solution {
         
         //if a vertex is part of cycle or is directed towards a cycle, it is not safe
         
-        boolean [] vis = new boolean [V];
-        boolean [] path = new boolean [V];
-        boolean [] safe = new boolean [V];
+        int [] safe = new int [V];
         
         ArrayList<ArrayList<Integer>> edge = new ArrayList<>();
         
@@ -15,42 +13,30 @@ class Solution {
         }
         
         for(int i = 0; i < edges.length; i++){
-            edge.get(edges[i][0]).add(edges[i][1]);
+            edge.get(edges[i][1]).add(edges[i][0]);
+            safe[edges[i][0]]++;
         }
         
         ArrayList<Integer> ans = new ArrayList<>();
+        Queue<Integer> q = new ArrayDeque<>();
         for(int i = 0; i < V; i++){
-            if(!vis[i]){
-                dfs(edge, vis, path, safe, i);
+            if(safe[i] == 0){
+                q.add(i);
             }
         }
         
-        for(int i = 0; i < V; i++){
-            if(safe[i]) ans.add(i);
+        while(!q.isEmpty()){
+            int v = q.poll();
+            ans.add(v);
+            for(int i: edge.get(v)){
+                safe[i]--;
+                if(safe[i] == 0){
+                    q.add(i);
+                }
+            }
         }
+        Collections.sort(ans);
         return ans;
     }
     
-    public boolean dfs(ArrayList<ArrayList<Integer>> edge, boolean [] vis, boolean [] path, boolean [] safe, int v){
-        
-        vis[v] = true;
-        path[v] = true;
-        for(int i : edge.get(v)){
-            if(!vis[i]){
-                if(dfs(edge, vis, path, safe, i)){
-                    
-                    return true;
-                }
-            }
-            else{
-                if(path[i]){
-                    
-                    return true;
-                }
-            }
-        }
-        safe[v] = true;
-        path[v] = false;
-        return false;
-    }
 }
