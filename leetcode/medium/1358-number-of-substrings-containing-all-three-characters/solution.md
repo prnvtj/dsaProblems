@@ -3,7 +3,7 @@
 ## Problem Information
 - **Platform:** Leetcode
 - **Difficulty:** Medium
-- **URL:** https://leetcode.com/problems/number-of-substrings-containing-all-three-characters/submissions/1888843402/
+- **URL:** https://leetcode.com/problems/number-of-substrings-containing-all-three-characters/submissions/1888846718/
 - **Date:** 2026-01-18
 
 ## Solution
@@ -14,43 +14,16 @@ class Solution {
         
         int n = s.length();
 
-        int left = 0, right = 0;
+        int left = 0;
         int [] count = new int [3];
         int ans = 0;
-        while(left < n && right < n){
+        for(int right = 0; right < n; right++){
+            count[s.charAt(right) - 'a']++;
             
-            while(right < n && (count [0] == 0 || count [1] == 0 || count [2] == 0)){
-                char c = s.charAt(right);
-                right++;
-                switch(c){
-                    case 'a':
-                        count[0]++;
-                        break;
-                    case 'b':
-                        count[1]++;
-                        break;
-                    default:
-                        count[2]++;
-                        break;
-                }
-            }
-            
-            while(left < right && (count [0] != 0 && count [1] != 0 && count [2] != 0)){
-                char c = s.charAt(left);
-                ans += (n - right + 1);
-                left ++;
-                
-                switch(c){
-                    case 'a':
-                        count[0]--;
-                        break;
-                    case 'b':
-                        count[1]--;
-                        break;
-                    default:
-                        count[2]--;
-                        break;
-                }
+            while(count [0] > 0 && count [1] > 0 && count [2] > 0){
+                count[s.charAt(left) - 'a']--;
+                ans += (n - right);
+                left ++;                
             }
         }
         return ans;
