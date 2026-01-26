@@ -3,14 +3,17 @@
 ## Problem Information
 - **Platform:** Leetcode
 - **Difficulty:** Medium
-- **URL:** https://leetcode.com/problems/gas-station/submissions/1897443813/
+- **URL:** https://leetcode.com/problems/gas-station/submissions/1897447353/
 - **Date:** 2026-01-26
 
 ## Solution
 
 ```java
 class Solution {
+    // totalGas - is the gas enough to cover the whole array. This covers circularly as well because doesn't matter wherever we start, the total sum of the array will be same to cover the whole.
+    // currGas - is the gas enough to move to the next cell. If not, we start from the next index; at the end we do not care how much of gas is left. This will only become negative if the totalGas is negative.
     public int canCompleteCircuit(int[] gas, int[] cost) {
+
         int n = gas.length;
         int totalGas = 0;
         int currGas = 0;
